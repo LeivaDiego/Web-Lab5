@@ -54,11 +54,11 @@ async function sendMessage(username, message) {
         // If the response is okay, parse the JSON data
         const result = await response.json();
         console.log('Message sent successfully:', result);
-        return True;
+        return true;
 
     } catch (error) {
         console.error('Failed to send message:', error);
-        return False; // Return false in case of an error
+        return false; // Return false in case of an error
     }
 }
 
@@ -67,8 +67,6 @@ sendMessage('Tester', 'Pruebita')
     .then(result => {
         if (result) {
             console.log('Chat updates');
-        } else {
-            console.log('Failed to send message');
         }
     });
 
@@ -79,3 +77,86 @@ loadMessages().then(messages => {
         console.log(`ID: [${msg.id}], User: ${msg.username}, Message: ${msg.message}`);
     })
 })
+
+
+
+// --- Devng Chat GUI Elements ---
+const chat = document.createElement('div');                 // Main chat container
+const messageList = document.createElement('div');          // List of messages
+const inputContainer = document.createElement('div');       // Input section
+const inputField = document.createElement('input');         // Input field to type messages
+const sendButton = document.createElement('button');        // Button to send messages
+
+// --- GUI Elements Styling ---
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.style.overflow = 'hidden';
+document.body.style.boxSizing = 'border-box';
+
+// Main chat container style
+Object.assign(chat.style, {
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: 'sans-serif',
+    background: '#f0f0f0',
+});
+
+
+// Message list box style
+Object.assign(messageList.style, {
+    flex: '1',
+    overflowY: 'auto',
+    padding: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px'
+});
+
+// Input container style
+Object.assign(inputContainer.style, {
+    display: 'flex',
+    padding: '10px',
+    borderTop: '1px solid #ccc',
+    background: '#fff',
+    position: 'sticky',
+    bottom: '0',
+    zIndex: '10'
+});
+
+// Input field style
+Object.assign(inputField.style, {
+    width: '100%',
+    flex: '1',
+    padding: '10px',
+    fontSize: '1rem',
+    borderRadius: '6px',
+    border: '1px solid #ccc'
+});
+
+// Send button style
+Object.assign(sendButton.style, {
+    marginLeft: '10px',
+    padding: '10px 20px',
+    fontSize: '1rem',
+    border: '1px solidrgb(0, 49, 101)',
+    borderRadius: '1px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    cursor: 'pointer'
+});
+
+// --- GUI Elements Content ---
+
+// Set placeholder and max length for the input field
+inputField.placeholder = 'Escribe tu mensaje (máx 140)';
+inputField.maxLength = 140;
+sendButton.textContent = 'Enviar';
+
+// --- GUI Elements Structure ---
+// Append the input field and send button to the input container
+inputContainer.appendChild(inputField);
+inputContainer.appendChild(sendButton);
+chat.appendChild(messageList);
+chat.appendChild(inputContainer);
+document.body.appendChild(chat);

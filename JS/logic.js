@@ -11,6 +11,7 @@ const messageList = document.createElement('div');          // List of messages
 const inputContainer = document.createElement('div');       // Input section
 const inputField = document.createElement('input');         // Input field to type messages
 const sendButton = document.createElement('button');        // Button to send messages
+const scrollButton = document.createElement('button');       // Button to scroll to the bottom of the chat
 
 // --- Custom Fonts ---
 const fontLink = document.createElement('link');
@@ -154,6 +155,23 @@ Object.assign(sendButton.style, {
     cursor: 'pointer'
 });
 
+// Scroll Down button style
+Object.assign(scrollButton.style, {
+    position: 'fixed',
+    bottom: '70px',
+    right: '20px',
+    padding: '10px',
+    borderRadius: '50%',
+    fontSize: '1.2rem',
+    display: 'none',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+    cursor: 'pointer',
+    zIndex: '30'
+});
+
 // --- GUI Elements Content ---
 
 // Set placeholder and max length for the input field
@@ -163,6 +181,7 @@ sendButton.textContent = 'Enviar';
 themeThumb.textContent = '☀️    '; // default theme
 header.style.fontWeight = 'Bold';
 title.textContent = 'DevNG Chat';
+scrollButton.textContent = '⬇️';
 
 // --- GUI Elements Structure ---
 header.appendChild(title);
@@ -174,6 +193,7 @@ chat.appendChild(inputContainer);
 inputContainer.appendChild(inputField);
 inputContainer.appendChild(sendButton);
 document.body.appendChild(chat);
+document.body.appendChild(scrollButton);
 
 // /**
 //  * This function fetches chat messages from the server and returns them as a JSON object. 
@@ -249,6 +269,18 @@ let dummyMessages = [
     { id: 4, username: 'Tester', message: 'Otro mensaje mío 👋' }
 ];
 
+// Dummy function to simulate loading messages from a server
+let fakeCounter = 0;
+async function loadMessagesDummy() {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    fakeCounter++;
+    dummyMessages.push({
+        id: dummyMessages.length + 1,
+        username: 'Bot',
+        message: `Mensaje automático #${fakeCounter}`
+    });
+    return dummyMessages;
+}
 // Send message dummy simulation
 async function sendMessageDummy(username, message) {
     await new Promise(resolve => setTimeout(resolve, 200)); // pequeño delay
@@ -260,10 +292,28 @@ async function sendMessageDummy(username, message) {
     return true;
 }
 
-// Load messages dummy simulation
-async function loadMessagesDummy() {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    return dummyMessages;
+/**
+ * This function checks if the user is at the bottom of the chat window.
+ * It takes an optional threshold parameter to determine how close to the bottom the user needs to be.
+ * @param {number} threshold - The threshold in pixels to check if the user is at the bottom.
+ * @returns {boolean} - Returns true if the user is at the bottom, false otherwise.
+ */
+function isUserAtBottom(threshold = 5) {
+    return messageList.scrollHeight - messageList.scrollTop <= messageList.clientHeight + threshold;
+}
+
+/**
+ * This function updates the visibility of the scroll button based on the user's scroll position.
+ * It hides the button if the user is at the bottom of the chat window, otherwise it shows it.
+ */
+function updateScrollButtonVisibility() {
+    if (isUserAtBottom()) {
+        // If the user is at the bottom, hide the scroll button
+        scrollButton.style.display = 'none';
+    } else {
+        // If the user is not at the bottom, show the scroll button
+        scrollButton.style.display = 'block';
+    }
 }
 
 
@@ -274,22 +324,28 @@ async function loadMessagesDummy() {
  * Each message object should contain a username and message property.
  */
 function renderMessages(messages){
+    // Check if the user is at the bottom of the chat
+    const isAtBottom = isUserAtBottom(10); // 10px threshold
+
     // Clear the message list before rendering new messages
     messageList.innerHTML = '';
 
     // For each message, create a div "bubble" and append it to the message list
     messages.forEach(msg => {
+
+        const {username, message} = msg; // Destructure the message object
+        
         // Create a message bubble with the message text and username
         const msgBubble = document.createElement('div');
         const msgText = document.createElement('div');
         const msgUser = document.createElement('div');
 
         // Check if the message is from the current user
-        const isCurrentUser = msg.username === devng_user;
+        const isCurrentUser = username === devng_user;
 
         // Set the content for the message bubble
-        msgText.textContent = msg.message;
-        msgUser.textContent = isCurrentUser ? 'Tú' : msg.username;  // Display "Tú" for the current user
+        msgText.textContent = message;
+        msgUser.textContent = isCurrentUser ? 'Tú' : username;  // Display "Tú" for the current user
 
         // Set the styles for the message bubble
         // Message bubble style
@@ -311,7 +367,6 @@ function renderMessages(messages){
         // Set the styles for the message text
         Object.assign(msgText.style, {
             fontSize: '1rem',
-            fontWeight: 'bold',
             marginBottom: '5px',
             wordBreak: 'break-word',
             whiteSpace: 'pre-wrap',
@@ -322,6 +377,7 @@ function renderMessages(messages){
             fontSize: '0.8rem',
             color: '#555',
             fontStyle: 'italic',
+            fontWeight: 'bold',
             textAlign: 'left'
         });
 
@@ -331,8 +387,10 @@ function renderMessages(messages){
         messageList.appendChild(msgBubble); // Append the message bubble to the message list
     });
 
-    // Scroll to the bottom of the message list
-    messageList.scrollTop = messageList.scrollHeight;
+    // If the user is at the bottom, scroll to the bottom of the message list
+    if (isAtBottom) {
+        messageList.scrollTop = messageList.scrollHeight; // Scroll to the bottom
+    }
 }
 
 
@@ -357,6 +415,8 @@ async function handleSendMessage() {
     }
 }
 
+// --- Event Listeners ---
+
 // Event listener for the send button
 sendButton.addEventListener('click', handleSendMessage);
 
@@ -367,6 +427,14 @@ inputField.addEventListener('keydown', e => {
         handleSendMessage();
     }
 });
+
+// Event listener for the scroll button to scroll to the bottom of the chat
+scrollButton.addEventListener('click', () => {
+    messageList.scrollTop = messageList.scrollHeight;
+});
+
+// Event listener for the scroll event to update the visibility of the scroll button
+messageList.addEventListener('scroll', updateScrollButtonVisibility);
 
 
 // Commented out code for testing purposes
@@ -396,3 +464,16 @@ async function main() {
 }
 
 main(); // Call the main function to initialize the chat
+
+
+// Message refresh interval
+// This section sets an interval to refresh the messages every 5 seconds
+setInterval(async () => {
+    const messages = await loadMessagesDummy();
+    renderMessages(messages);
+    console.log('Messages refreshed!');
+}, 5000); // Refresh messages every 5 seconds
+
+
+// Scroll button visibility interval
+setInterval(updateScrollButtonVisibility, 500);

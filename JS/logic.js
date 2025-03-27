@@ -1,5 +1,8 @@
+// --- DevNG Chat Application ---
+
 // Username for the chat
 const devng_user = "Tester";
+
 // Last Message ID
 let lastRenderedMessageId = 0;
 
@@ -17,7 +20,7 @@ const scrollButton = document.createElement('button');       // Button to scroll
 
 // --- Custom Fonts ---
 const fontLink = document.createElement('link');
-fontLink.href = 'https://fonts.googleapis.com/css2?family=Boldonse&family=Chango&family=Cherry+Bomb+One&family=Fascinate+Inline&family=Galindo&display=swap';
+fontLink.href = 'https://fonts.googleapis.com/css2?family=Galindo&family=Poppins:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap';
 fontLink.rel = 'stylesheet';
 document.head.appendChild(fontLink);
 
@@ -49,6 +52,30 @@ fadeOutStyle.textContent = `
 `;
 document.head.appendChild(fadeOutStyle);
 
+// --- Color Palette ---
+const colors = {
+    // Primary Dark
+    richBlack: '#0A1513',
+    darkGreen: '#032221',
+    bangladeshGreen: '#03624C',
+    darkGray: '#737373',
+    // Primary Light
+    mountainMeadow: '#2CC295',
+    caribbeanGreen: '#00DF81',
+    antiFlashWhite: '#F1F7F6',
+    // Secondary Dark
+    pine: '#06302B',
+    basil: '#0B453A',
+    forest: '#095544',
+    stone: '#707D7D',
+    // Secondary Light
+    frog: '#17876D',
+    mint: '#2FA98C',
+    pistachio: '#AAC8C4',
+    lightPistachio: '#CBF2ED'
+}
+
+
 // --- GUI Elements Styling ---
 
 // Body style to remove default margin and padding
@@ -56,14 +83,16 @@ document.body.style.margin = '0';
 document.body.style.padding = '0';
 document.body.style.overflow = 'hidden';
 document.body.style.boxSizing = 'border-box';
+document.body.style.backgroundColor = '#F1F7F6';
+
 
 // Main chat container style
 Object.assign(chat.style, {
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: 'sans-serif',
-    background: '#f0f0f0',
+    fontFamily: 'Poppins, sans-serif',
+    background: colors.antiFlashWhite
 });
 
 // Header container style
@@ -72,33 +101,31 @@ Object.assign(header.style, {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '10px 20px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
+    backgroundColor: colors.caribbeanGreen,
     position: 'sticky',
     top: '0',
     zIndex: '20',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+    boxShadow: `0 2px 4px ${colors.darkGray}`
 });
 
 // Title style *custom font
 Object.assign(title.style, {
     fontFamily: `'Galindo', sans-serif`,
-    backgroundColor: 'white',
-    color: '#007bff',
-    padding: '4px 12px',
+    fontWeight: 'bold',
+    fontSize: '1.5rem',
+    backgroundColor: colors.frog,
+    color: colors.caribbeanGreen,
+    padding: '10px 10px',
     borderRadius: '20px',
-    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
-    fontSize: '1.3rem',
-    lineHeight: '1',
+    boxShadow: `0 1px 4px ${colors.darkGray}`,
+    lineHeight: '1'
 });
 
 // Theme switch Style
 Object.assign(themeSwitch.style, {
     width: '50px',
     height: '26px',
-    backgroundColor: '#ccc',
+    backgroundColor: colors.frog,
     borderRadius: '15px',
     position: 'relative',
     cursor: 'pointer',
@@ -112,11 +139,11 @@ Object.assign(themeSwitch.style, {
 Object.assign(themeThumb.style, {
     width: '22px',
     height: '22px',
-    backgroundColor: 'white',
+    backgroundColor: colors.pistachio,
     borderRadius: '50%',
     transition: 'transform 0.3s',
     transform: 'translateX(0)',
-    boxShadow: '0 0 4px rgba(0,0,0,0.2)',
+    boxShadow: `0 0 4px ${colors.darkGray}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -139,8 +166,8 @@ Object.assign(messageList.style, {
 Object.assign(inputContainer.style, {
     display: 'flex',
     padding: '10px',
-    borderTop: '1px solid #ccc',
-    background: '#fff',
+    borderTop: `1px solid ${colors.forest}`,
+    background: colors.lightPistachio,
     position: 'sticky',
     bottom: '0',
     zIndex: '10'
@@ -148,53 +175,61 @@ Object.assign(inputContainer.style, {
 
 // Input field style
 Object.assign(inputField.style, {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: '1rem',
+    fontWeight: '400',
     width: '100%',
     flex: '1',
     padding: '10px',
-    fontSize: '1rem',
     borderRadius: '6px',
-    border: '1px solid #ccc'
+    border: `1px solid ${colors.forest}`,
+    backgroundColor: colors.antiFlashWhite
 });
 
 // Send button style
 Object.assign(sendButton.style, {
     marginLeft: '10px',
     padding: '10px 20px',
+    fontFamily: 'Poppins, sans-serif',
     fontSize: '1rem',
-    border: '1px solid rgb(0, 49, 101)',
+    fontWeight: '500',
+    border: `1px solid ${colors.forest}`,
     borderRadius: '6px',
-    backgroundColor: '#007bff',
-    color: 'white',
+    backgroundColor: colors.frog,
+    color: colors.antiFlashWhite,
     cursor: 'pointer'
 });
 
 // Scroll Down button style
 Object.assign(scrollButton.style, {
     position: 'fixed',
-    bottom: '70px',
+    bottom: '80px',
     right: '20px',
     padding: '10px',
+    width: '40px',
+    height: '40px',
     borderRadius: '50%',
-    fontSize: '1.2rem',
-    display: 'none',
-    backgroundColor: '#007bff',
+    fontSize: '1rem',
+    backgroundColor: colors.mint,
     color: 'white',
-    border: 'none',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+    border: `1px solid ${colors.forest}`,
+    boxShadow: `0 2px 4px ${colors.darkGray}`,
     cursor: 'pointer',
-    zIndex: '30'
+    zIndex: '30',
+    display: 'none',
+    alignItems: 'center',
+    justifyContent: 'center'
 });
 
-// --- GUI Elements Content ---
 
+// --- GUI Elements Content ---
+//☽
 // Set placeholder and max length for the input field
 inputField.placeholder = 'Escribe tu mensaje (máx 140)';
 inputField.maxLength = 140;
 sendButton.textContent = 'Enviar';
-themeThumb.textContent = '☀️    '; // default theme
-header.style.fontWeight = 'Bold';
 title.textContent = 'DevNG Chat';
-scrollButton.textContent = '⬇️';
+scrollButton.textContent = '⬇︎';
 
 // --- GUI Elements Structure ---
 header.appendChild(title);
@@ -208,101 +243,68 @@ inputContainer.appendChild(sendButton);
 document.body.appendChild(chat);
 document.body.appendChild(scrollButton);
 
-// /**
-//  * This function fetches chat messages from the server and returns them as a JSON object. 
-//  * It handles errors by throwing an exception if the response is not okay. 
-//  * @returns {Promise<any>} - A promise that resolves to the fetched chat messages in JSON format. 
-//  */
-// async function loadMessages() {
+/**
+ * This function fetches chat messages from the server and returns them as a JSON object. 
+ * It handles errors by throwing an exception if the response is not okay. 
+ * @returns {Promise<any>} - A promise that resolves to the fetched chat messages in JSON format. 
+ */
+async function loadMessages() {
 
-//     try {
-//         // GET request to fetch messages from the server
-//         const response = await fetch('https://chat.devng.online/chats');
+    try {
+        // GET request to fetch messages from the server
+        const response = await fetch('https://chat.devng.online/chats');
 
-//         // Check if the response is okay
-//         if (!response.ok) {
-//             // If it isn't true, throw an error with the status text
-//             throw new Error(`ERROR: Messages could not be fetched -> ${response.statusText}`);
-//         }
+        // Check if the response is okay
+        if (!response.ok) {
+            // If it isn't true, throw an error with the status text
+            throw new Error(`ERROR: Messages could not be fetched -> ${response.statusText}`);
+        }
 
-//         // If the response is okay, parse the JSON data
-//         const messages = await response.json();
-//         return messages;
+        // If the response is okay, parse the JSON data
+        const messages = await response.json();
+        return messages;
     
-//     } catch (error) {
-//         console.error('Failed to fetch messages:', error);
-//         return []; // Return an empty array in case of an error
-//     }
-// }
-
-// /**
-//  * This function sends a message to the server.
-//  * It takes a username and message as parameters and performs a POST request to send the message.
-//  * It handles errors by throwing an exception if the response is not okay.
-//  * @param {string} username - The username of the sender.
-//  * @param {string} message - The message to be sent.
-//  * @return {Promise<boolean>} - A promise that resolves to true if the message was sent successfully, false otherwise.
-// */
-// async function sendMessage(username, message) {
-
-//     try {
-//         // POST request to send a new message to the server
-//         const response = await fetch('https://chat.devng.online/chats', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ username, message })
-//         });
-
-//         // Check if the response is okay
-//         if (!response.ok) {
-//             // If it isn't true, throw an error with the status text
-//             throw new Error(`ERROR: Message could not be sent -> ${response.statusText}`);
-//         }
-
-//         // If the response is okay, parse the JSON data
-//         const result = await response.json();
-//         console.log('Message sent successfully:', result);
-//         return true;
-
-//     } catch (error) {
-//         console.error('Failed to send message:', error);
-//         return false; // Return false in case of an error
-//     }
-// }
-
-// --- Dummy Data for Testing ---
-// This section simulates the server responses for testing purposes. 
-// Due to the real server being down, we create a local array of messages and functions to simulate sending and loading messages.
-let dummyMessages = [
-    { id: 1, username: 'Tester', message: '¡Hola, este es mi mensaje!' },
-    { id: 2, username: 'Juan', message: 'Hola, ¿cómo estás?' },
-    { id: 3, username: 'Ana', message: '¡Todo bien por aquí!' },
-    { id: 4, username: 'Tester', message: 'Otro mensaje mío 👋' }
-];
-
-// Dummy function to simulate loading messages from a server
-let fakeCounter = 0;
-async function loadMessagesDummy() {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    fakeCounter++;
-    dummyMessages.push({
-        id: dummyMessages.length + 1,
-        username: 'Bot',
-        message: `Mensaje automático #${fakeCounter}`
-    });
-    return dummyMessages;
+    } catch (error) {
+        console.error('Failed to fetch messages:', error);
+        return []; // Return an empty array in case of an error
+    }
 }
-// Send message dummy simulation
-async function sendMessageDummy(username, message) {
-    await new Promise(resolve => setTimeout(resolve, 200)); // pequeño delay
-    dummyMessages.push({
-        id: dummyMessages.length + 1,
-        username,
-        message
-    });
-    return true;
+
+/**
+ * This function sends a message to the server.
+ * It takes a username and message as parameters and performs a POST request to send the message.
+ * It handles errors by throwing an exception if the response is not okay.
+ * @param {string} username - The username of the sender.
+ * @param {string} message - The message to be sent.
+ * @return {Promise<boolean>} - A promise that resolves to true if the message was sent successfully, false otherwise.
+*/
+async function sendMessage(username, message) {
+
+    try {
+        // POST request to send a new message to the server
+        const response = await fetch('https://chat.devng.online/chats', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, message })
+        });
+
+        // Check if the response is okay
+        if (!response.ok) {
+            // If it isn't true, throw an error with the status text
+            throw new Error(`ERROR: Message could not be sent -> ${response.statusText}`);
+        }
+
+        // If the response is okay, parse the JSON data
+        const result = await response.json();
+        console.log('Message sent successfully:', result);
+        return true;
+
+    } catch (error) {
+        console.error('Failed to send message:', error);
+        return false; // Return false in case of an error
+    }
 }
 
 /**
@@ -392,11 +394,12 @@ function renderMessages(messages){
             display: 'flex',
             flexDirection: 'column',
             alignSelf: isCurrentUser ? 'flex-end' : 'flex-start', // Align to the right for current user
-            backgroundColor: isCurrentUser ? '#007bff' : '#f0f0f0', // Different background color for current user
-            color: '#000',
-            boxShadow: '0 0 4px rgba(0,0,0,0.1)',
+            backgroundColor: isCurrentUser ? colors.mountainMeadow : colors.pistachio, // Different background color for current user
+            color: colors.darkGreen,
+            boxShadow: '0 0 4px rgba(0,0,0,0.2)',
             fontSize: '1rem',
-            fontFamily: 'sans-serif'
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: '400'
         });
 
         // Set the styles for the message text
@@ -410,9 +413,10 @@ function renderMessages(messages){
         // Set the styles for the username
         Object.assign(msgUser.style, {
             fontSize: '0.8rem',
-            color: '#555',
+            color: colors.richBlack,
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: '600',
             fontStyle: 'italic',
-            fontWeight: 'bold',
             textAlign: 'left'
         });
 
@@ -442,10 +446,10 @@ async function handleSendMessage() {
 
     // Send the message using the dummy function
     // In a real scenario, you would call sendMessage(username, message) instead
-    const success = await sendMessageDummy(devng_user, message);
+    const success = await sendMessage(devng_user, message);
     if (success) {
         inputField.value = ''; // Clear the input field after sending the message
-        const messages = await loadMessagesDummy(); // Load the messages again
+        const messages = await loadMessages(); // Load the messages again
         renderMessages(messages); // Render the messages in the chat window
     }
 }
@@ -471,30 +475,12 @@ scrollButton.addEventListener('click', () => {
 // Event listener for the scroll event to update the visibility of the scroll button
 messageList.addEventListener('scroll', updateScrollButtonVisibility);
 
-
-// Commented out code for testing purposes
-// // The function sendMessage is called to send a message to the chat server
-// sendMessage('Tester', 'Pruebita')
-//     .then(result => {
-//         if (result) {
-//             console.log('Chat updates');
-//         }
-//     });
-
-// // The function fetchMessages is called to retrieve chat messages and log them
-// loadMessages().then(messages => {
-//     // For each message, log the details to the console
-//     messages.forEach(msg => {
-//         console.log(`ID: [${msg.id}], User: ${msg.username}, Message: ${msg.message}`);
-//     })
-// })
-
 /**
  * This function initializes the chat by loading and rendering messages.
  * It is called when the script is loaded.
  */
 async function main() {
-    const messages = await loadMessagesDummy();
+    const messages = await loadMessages();
     renderMessages(messages);
 }
 
@@ -504,9 +490,8 @@ main(); // Call the main function to initialize the chat
 // Message refresh interval
 // This section sets an interval to refresh the messages every 5 seconds
 setInterval(async () => {
-    const messages = await loadMessagesDummy();
+    const messages = await loadMessages();
     renderMessages(messages);
-    console.log('Messages refreshed!');
 }, 5000); // Refresh messages every 5 seconds
 
 

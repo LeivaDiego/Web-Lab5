@@ -1,5 +1,7 @@
 // Username for the chat
 const devng_user = "Tester";
+// Last Message ID
+let lastRenderedMessageId = 0;
 
 // --- Devng Chat GUI Elements ---
 const header = document.createElement('div');               // Header container
@@ -19,6 +21,33 @@ fontLink.href = 'https://fonts.googleapis.com/css2?family=Boldonse&family=Chango
 fontLink.rel = 'stylesheet';
 document.head.appendChild(fontLink);
 
+// --- Custom Animations ---
+
+// Fade-in animation for new messages or scroll button
+const fadeInStyle = document.createElement('style');
+fadeInStyle.textContent = `
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+`;
+document.head.appendChild(fadeInStyle);
+
+// Fade-out animation for scroll button when not needed
+const fadeOutStyle = document.createElement('style');
+fadeOutStyle.textContent = `
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+`;
+document.head.appendChild(fadeOutStyle);
 
 // --- GUI Elements Styling ---
 
@@ -36,7 +65,6 @@ Object.assign(chat.style, {
     fontFamily: 'sans-serif',
     background: '#f0f0f0',
 });
-
 
 // Header container style
 Object.assign(header.style, {
@@ -64,20 +92,6 @@ Object.assign(title.style, {
     boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
     fontSize: '1.3rem',
     lineHeight: '1',
-});
-
-
-Object.assign(themeSwitch.style, {
-    width: '50px',
-    height: '26px',
-    backgroundColor: '#ccc',
-    borderRadius: '15px',
-    position: 'relative',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '2px',
 });
 
 // Theme switch Style
@@ -110,7 +124,6 @@ Object.assign(themeThumb.style, {
     userSelect: 'none',
     lineHeight: '1'
 });
-
 
 // Message list box style
 Object.assign(messageList.style, {
@@ -307,12 +320,27 @@ function isUserAtBottom(threshold = 5) {
  * It hides the button if the user is at the bottom of the chat window, otherwise it shows it.
  */
 function updateScrollButtonVisibility() {
-    if (isUserAtBottom()) {
-        // If the user is at the bottom, hide the scroll button
-        scrollButton.style.display = 'none';
+    const isAtBottom = isUserAtBottom(10); // 10px threshold
+
+    if (isAtBottom){
+        // Check if the scroll button is visible and remove the fade-in class
+        if (scrollButton.style.display !== 'none') {
+            scrollButton.classList.remove('fade-in'); // Remove fade-in class
+            scrollButton.classList.add('fade-out'); // Add fade-out class
+
+            // Set a timeout to hide the button after the fade-out animation
+            setTimeout(() => {
+                scrollButton.style.display = 'none'; // Hide the button
+                scrollButton.classList.remove('fade-out'); // Remove fade-out class
+            }
+            , 300); // Match the duration of the fade-out animation
+        } 
     } else {
-        // If the user is not at the bottom, show the scroll button
-        scrollButton.style.display = 'block';
+        // Show the scroll button if the user is not at the bottom
+        if (scrollButton.style.display === 'none') {
+            scrollButton.style.display = 'block'; // Show the button
+            scrollButton.classList.add('fade-in'); // Add fade-in class
+        }
     }
 }
 
@@ -333,7 +361,7 @@ function renderMessages(messages){
     // For each message, create a div "bubble" and append it to the message list
     messages.forEach(msg => {
 
-        const {username, message} = msg; // Destructure the message object
+        const {id, username, message} = msg; // Destructure the message object
         
         // Create a message bubble with the message text and username
         const msgBubble = document.createElement('div');
@@ -346,6 +374,13 @@ function renderMessages(messages){
         // Set the content for the message bubble
         msgText.textContent = message;
         msgUser.textContent = isCurrentUser ? 'Tú' : username;  // Display "Tú" for the current user
+
+        // Add the fade-in class for animation
+        // and check if the message is the last one rendered
+        if (id > lastRenderedMessageId) {
+            msgBubble.classList.add('fade-in'); // Add fade-in animation class
+            lastRenderedMessageId = id; // Update the last rendered message ID
+        }
 
         // Set the styles for the message bubble
         // Message bubble style

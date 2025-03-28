@@ -13,6 +13,8 @@ let currentTheme = localStorage.getItem('devng_chat_theme') || 'light'; // Defau
 // Messages array
 let messages = [];
 
+
+
 // --- Devng Chat GUI Elements ---
 const header = document.createElement('div');               // Header container
 const title = document.createElement('span');               // Title of the chat
@@ -25,11 +27,15 @@ const inputField = document.createElement('input');         // Input field to ty
 const sendButton = document.createElement('button');        // Button to send messages
 const scrollButton = document.createElement('button');       // Button to scroll to the bottom of the chat
 const themeIcon = document.createElement('span');           // Theme icon for the switch
+
+
 // --- Custom Fonts ---
 const fontLink = document.createElement('link');
 fontLink.href = 'https://fonts.googleapis.com/css2?family=Galindo&family=Poppins:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap';
 fontLink.rel = 'stylesheet';
 document.head.appendChild(fontLink);
+
+
 
 // --- Custom Animations ---
 
@@ -46,6 +52,7 @@ fadeInStyle.textContent = `
 `;
 document.head.appendChild(fadeInStyle);
 
+
 // Fade-out animation for scroll button when not needed
 const fadeOutStyle = document.createElement('style');
 fadeOutStyle.textContent = `
@@ -58,6 +65,8 @@ fadeOutStyle.textContent = `
 }
 `;
 document.head.appendChild(fadeOutStyle);
+
+
 
 // --- Color Palette ---
 const colors = {
@@ -136,6 +145,8 @@ function applyTheme(theme) {
 }
 
 applyTheme(currentTheme);
+
+
 
 // --- GUI Elements Styling ---
 // Body style to remove default margin and padding
@@ -278,6 +289,7 @@ Object.assign(themeIcon.style, {
 });
 
 
+
 // --- GUI Elements Content ---
 // Set placeholder and max length for the input field
 inputField.placeholder = 'Escribe tu mensaje (máx 140)';
@@ -286,6 +298,7 @@ sendButton.textContent = 'Enviar';
 title.textContent = 'DevNG Chat';
 scrollButton.textContent = '⬇︎';
 themeIcon.textContent = '☀︎'; // Sun icon for light theme
+
 
 // --- GUI Elements Structure ---
 header.appendChild(title);
@@ -303,7 +316,6 @@ document.body.appendChild(scrollButton);
 
 
 // --- Functions ---
-
 /**
  * This function fetches chat messages from the server and returns them as a JSON object. 
  * It handles errors by throwing an exception if the response is not okay. 
@@ -526,6 +538,7 @@ async function handleSendMessage() {
 }
 
 
+
 // --- Event Listeners ---
 
 // Event listener for the send button
@@ -556,8 +569,8 @@ themeSwitch.addEventListener('click', () => {
 });
 
 
-// --- Main section ---
 
+// --- Main section ---
 /**
  * This function initializes the chat by loading and rendering messages.
  * It is called when the script is loaded.
@@ -576,7 +589,6 @@ setInterval(async () => {
     messages = await loadMessages();
     renderMessages(messages);
 }, 5000); // Refresh messages every 5 seconds
-
 
 // Scroll button visibility interval
 setInterval(updateScrollButtonVisibility, 500);

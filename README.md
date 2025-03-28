@@ -9,6 +9,6 @@
 - Diego Leiva - 21752
 
 ## Preview
-|Dark Mode | Light |
+|Dark Mode | Light Mode |
 |---|---|
 |![dark](/Assets/dark-mode.png) |![light](/Assets/light-mode.png)|

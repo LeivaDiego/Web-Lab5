@@ -2,13 +2,16 @@
 
 // --- Constants and Variables ---
 // Username for the chat
-const devng_user = "Tester";
+const devng_user = "Mr. Puxter";
 
 // Last Message ID
 let lastRenderedMessageId = 0;
 
 // Current Theme
 let currentTheme = localStorage.getItem('devng_chat_theme') || 'light'; // Default to light theme
+
+// Messages array
+let messages = [];
 
 // --- Devng Chat GUI Elements ---
 const header = document.createElement('div');               // Header container
@@ -513,8 +516,7 @@ async function handleSendMessage() {
     // Check if the message is empty or exceeds 140 characters
     if (message.length === 0 || message.length > 140) return;
 
-    // Send the message using the dummy function
-    // In a real scenario, you would call sendMessage(username, message) instead
+    // Send the message using the sendMessage function
     const success = await sendMessage(devng_user, message);
     if (success) {
         inputField.value = ''; // Clear the input field after sending the message
@@ -550,17 +552,19 @@ themeSwitch.addEventListener('click', () => {
     currentTheme = currentTheme === 'light' ? 'dark' : 'light'; // Toggle theme
     localStorage.setItem('devng_chat_theme', currentTheme); // Store the selected theme in local storage
     applyTheme(currentTheme); // Apply the selected theme
-    renderMessages(dummyMessages); // Re-render messages to apply theme changes
+    renderMessages(messages); // Re-render messages to apply theme changes
 });
 
+
 // --- Main section ---
+
 /**
  * This function initializes the chat by loading and rendering messages.
  * It is called when the script is loaded.
  */
 async function main() {
     applyTheme(currentTheme);
-    const messages = await loadMessages();
+    messages = await loadMessages();
     renderMessages(messages);    
 }
 
@@ -569,7 +573,7 @@ main(); // Call the main function to initialize the chat
 // Message refresh interval
 // This section sets an interval to refresh the messages every 5 seconds
 setInterval(async () => {
-    const messages = await loadMessages();
+    messages = await loadMessages();
     renderMessages(messages);
 }, 5000); // Refresh messages every 5 seconds
 

@@ -5,5 +5,10 @@
  **Departamento de Ciencias de la Computación**  
  **Sistemas y Tecnologías Web**  
  
- ## Autor
- - Diego Leiva - 21752
+## Autor
+- Diego Leiva - 21752
+
+## Preview
+|Dark Mode | Light |
+|---|---|
+|![dark](/Assets/dark-mode.png) |![light](/Assets/light-mode.png)|
